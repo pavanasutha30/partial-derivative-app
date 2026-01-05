@@ -2,80 +2,77 @@
 import streamlit as st
 import sympy as sp
 
-# --- PAGE CONFIG ---
-st.set_page_config(page_title="Partial Derivative Lab", layout="centered")
+# Page configuration
+st.set_page_config(page_title="Partial Derivative Explorer", layout="wide")
 
-# --- APP TITLE ---
-st.title("Partial Derivative Explorer")
-st.markdown("Explore and compute partial derivatives for functions $f(x, y)$.")
+st.title("Multivariable Calculus: Partial Derivatives")
 
-# --- CREATE TABS ---
-tab_info, tab_calc = st.tabs(["📚 Definitions", "🧮 Calculator"])
+# --- UPDATED TABS ---
+tab1, tab2, tab3 = st.tabs(["🏠 General", "📖 Definitions & Theorems", "🧮 Calculator"])
 
-# --- TAB 1: DEFINITIONS & EXPLANATION ---
-with tab_info:
-    st.header("What is a Partial Derivative?")
+# --- TAB 1: GENERAL ---
+with tab1:
+    st.header("Introduction to Multivariable Functions")
     st.write("""
-    For a function of two variables $f(x, y)$, the partial derivative represents the rate of change 
-    of the function with respect to one variable while holding the other constant.
+    In the real world, most things depend on more than one factor. For example, the volume of a 
+    cylinder depends on both its **radius** ($r$) and its **height** ($h$). 
+    
+    In mathematics, we represent these relationships as functions of two or more variables:
     """)
-
-    st.subheader("The Partial Derivative with respect to $x$")
-    st.write("Holding $y$ as a constant:")
-    st.latex(r"\frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h, y) - f(x, y)}{h}")
-
-    st.subheader("The Partial Derivative with respect to $y$")
-    st.write("Holding $x$ as a constant:")
-    st.latex(r"\frac{\partial f}{\partial y} = \lim_{h \to 0} \frac{f(x, y+h) - f(x, y)}{h}")
-
-
-
+    st.latex(r"z = f(x, y)")
+    
     st.info("""
-    **Visual Tip:** If you imagine a 3D surface, the partial derivative $\\partial f/\\partial x$ 
-    is the slope of the line tangent to the surface when you slice it parallel to the x-axis.
+    **The Goal of this App:** This tool helps you understand how a function changes when you move in just one direction 
+    (either the $x$-direction or the $y$-direction) while keeping everything else perfectly still.
     """)
 
-# --- TAB 2: CALCULATOR ---
-with tab_calc:
-    st.header("Multivariable Calculator")
-    st.write("Enter your function below using `x` and `y`.")
+# --- TAB 2: DEFINITIONS & THEOREMS ---
+with tab2:
+    st.header("Mathematical Foundations")
+    
+    st.subheader("1. Formal Definition")
+    st.write("The partial derivative of $f(x, y)$ with respect to $x$ at a point $(a, b)$ is:")
+    st.latex(r"f_x(a, b) = \lim_{h \to 0} \frac{f(a+h, b) - f(a, b)}{h}")
+    
+    st.write("The partial derivative of $f(x, y)$ with respect to $y$ at a point $(a, b)$ is:")
+    st.latex(r"f_y(a, b) = \lim_{k \to 0} \frac{f(a, b+k) - f(a, b)}{k}")
 
-    # Input field
-    user_func = st.text_input("Enter function $f(x, y)$:", value="x**2 + 3*x*y + sin(y)")
+    
 
+    st.subheader("2. Clairaut's Theorem")
+    st.write("""
+    An important theorem in multivariable calculus states that if the second-order partial 
+    derivatives are continuous, then the order of differentiation doesn't matter:
+    """)
+    st.latex(r"\frac{\partial^2 f}{\partial x \partial y} = \frac{\partial^2 f}{\partial y \partial x}")
+
+# --- TAB 3: CALCULATOR ---
+with tab3:
+    st.header("Partial Derivative Calculator")
+    st.write("Enter a function of $x$ and $y$ to compute $\\frac{\\partial f}{\\partial x}$ and $\\frac{\\partial f}{\\partial y}$.")
+
+    user_input = st.text_input("Enter function $f(x, y)$:", value="x**3 + x**2*y**3 - 2*y**2")
+    
     try:
-        # Define the symbols
         x, y = sp.symbols('x y')
-
-        # Parse the user input into a math expression
-        f = sp.sympify(user_func)
-
-        # Calculate the derivatives
+        f = sp.sympify(user_input)
+        
         df_dx = sp.diff(f, x)
         df_dy = sp.diff(f, y)
-
-        # Display Results
-        st.markdown("---")
-        st.subheader("Step-by-Step Result")
-
-        st.write("Input Function:")
-        st.latex(f"f(x, y) = {sp.latex(f)}")
-
-        c1, c2 = st.columns(2)
-
-        with c1:
-            st.markdown("### W.R.T. $x$")
+        
+        st.divider()
+        st.write("**Calculated Derivatives:**")
+        
+        col1, col2 = st.columns(2)
+        with col1:
             st.latex(r"\frac{\partial f}{\partial x} = " + sp.latex(df_dx))
-            st.caption("Calculated by treating $y$ as a constant.")
-
-        with c2:
-            st.markdown("### W.R.T. $y$")
+        with col2:
             st.latex(r"\frac{\partial f}{\partial y} = " + sp.latex(df_dy))
-            st.caption("Calculated by treating $x$ as a constant.")
-
+            
     except Exception as e:
-        st.error(f"Make sure to use correct syntax (e.g., `*` for multiplication and `**` for powers). Error: {e}")
+        st.error(f"Syntax Error: {e}")
 
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
