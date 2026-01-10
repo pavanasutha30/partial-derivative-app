@@ -63,7 +63,7 @@ with tab2:
         st.markdown("**With respect to $y$:**")
         st.latex(r"f_y(x, y) = \frac{\partial f}{\partial y} = \frac{\partial z}{\partial y} = f_2 = D_2f")
     
-   st.subheader("3. Rules for Finding Partial Derivatives")
+    st.subheader("3. Rules for Finding Partial Derivatives")
     st.info("""
     1. To find $f_x$, regard $y$ as a constant and differentiate $f(x,y)$ with respect to $x$.
     2. To find $f_y$, regard $x$ as a constant and differentiate $f(x,y)$ with respect to $y$.
@@ -242,6 +242,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
