@@ -165,8 +165,8 @@ with tab3:
         except Exception as e:
             st.error(f"Syntax Error: {e}")
 
-           else:
-            st.header("Real-Life Scenario Generator")
+            else:
+                st.header("Real-Life Scenario Generator")
         
         # Expanded Scenarios Database (5 Problems)
         scenarios = [
@@ -242,6 +242,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
