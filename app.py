@@ -20,11 +20,7 @@ with tab1:
     a **partial derivative** measures how the output ($z$) changes when only *one* of the input variables 
     changes while the other is held constant.
     """)
-    
-    
-    
-   st.subheader("Real-World Applications")
-    
+    st.subheader("Real-World Applications")
     st.write("""
     In mathematics, a partial derivative allows us to isolate the effect of a single independent variable on a 
     system that depends on multiple factors. Mathematically, this is done by treating all other variables 
@@ -246,6 +242,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
