@@ -50,7 +50,7 @@ with tab2:
     with col_lim1: st.latex(r"f_x(x, y) = \lim_{h \to 0} \frac{f(x+h, y) - f(x, y)}{h}")
     with col_lim2: st.latex(r"f_y(x, y) = \lim_{k \to 0} \frac{f(x, y+k) - f(x, y)}{k}")
     
-   st.subheader("2. Notations for Partial Derivatives")
+    st.subheader("2. Notations for Partial Derivatives")
     st.write("The following notations are used to represent partial derivatives:")
     
     col_not1, col_not2 = st.columns(2)
@@ -242,6 +242,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
