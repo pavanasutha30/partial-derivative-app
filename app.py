@@ -118,18 +118,20 @@ with tab3:
         
         scenarios = [
             {
-                "title": "Ideal Gas Law",
+                "title": "Thermodynamics: Ideal Gas Law",
                 "context": "The pressure $P$ of a gas is given by $P(T, V) = \\frac{8.31T}{V}$.",
-                "func": 8.31 * x / y, 
-                "vars": ("T", "V"),
-                "question": "Find the rate of change of pressure with respect to Temperature ($T$)."
+                "func": 8.31 * x_sym / y_sym, 
+                "vars": ("Temperature T", "Volume V"),
+                "question": "Find the rate of change of pressure with respect to Temperature.",
+                "interpretation": "This derivative represents how much the pressure increases for every 1-unit increase in temperature while volume is constant."
             },
             {
-                "title": "Production Output (Cobb-Douglas)",
-                "context": "A factory's production is $Q(L, K) = 50L^{0.5}K^{0.5}$.",
-                "func": 50 * (x**0.5) * (y**0.5),
-                "vars": ("L", "K"),
-                "question": "Find the marginal productivity of Labor (∂Q/∂L)."
+                "title": "Economics: Cobb-Douglas Production",
+                "context": "A factory output is $Q(L, K) = 50L^{0.5}K^{0.5}$, where $L$ is labor and $K$ is capital.",
+                "func": 50 * (x_sym**0.5) * (y_sym**0.5),
+                "vars": ("Labor L", "Capital K"),
+                "question": "Find the Marginal Productivity of Labor (∂Q/∂L).",
+                "interpretation": "This derivative shows the additional output produced by adding one more unit of labor while keeping capital fixed."
             }
         ]
 
@@ -140,18 +142,20 @@ with tab3:
             prob = st.session_state.problem
             st.subheader(prob["title"])
             st.write(prob["context"])
-            st.info(prob["question"])
+            st.warning(f"**Question:** {prob['question']}")
             
-            if st.button("Show Problem Solution"):
+            if st.button("Reveal Solution & Interpretation"):
                 f_prob = prob["func"]
-                diff_prob = sp.diff(f_prob, x)
-                st.write(f"**Step 1:** We want to find the derivative with respect to **{prob['vars'][0]}**.")
-                st.write(f"**Step 2:** Treat **{prob['vars'][1]}** as a constant.")
-                st.write("**Step 3:** Perform the differentiation:")
-                st.latex(r"\text{Result: } " + sp.latex(diff_prob))
+                diff_prob = sp.diff(f_prob, x_sym)
+                st.write(f"**Step 1:** Differentiate with respect to {prob['vars'][0]}.")
+                st.write(f"**Step 2:** Treat {prob['vars'][1]} as a constant.")
+                st.latex(r"\text{Solution: } " + sp.latex(diff_prob))
+                st.success(f"**Meaning:** {prob['interpretation']}")
+                
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
