@@ -9,7 +9,7 @@ st.set_page_config(page_title="Partial Derivatives Lab", layout="wide")
 
 # --- MINI HEADER SECTION ---
 st.title("Partial Derivatives as Rates of Change")
-st.caption("🚀 **MAT201 Advanced Calculus** | Created by: Pavanasutha Srilaxsmi & Yuvaniesh")
+st.caption("🧮 **MAT201 Advanced Calculus** | Created by: Pavanasutha Srilaxsmi & Yuvaniesh")
 st.divider()
 
 # Create Three Tabs
@@ -244,6 +244,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
