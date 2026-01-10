@@ -1,5 +1,7 @@
 import streamlit as st
 import sympy as sp
+import numpy as np
+import plotly.graph_objects as go
 import random
 
 # Page configuration
@@ -48,42 +50,68 @@ with tab2:
 
 # --- TAB 3: CALCULATOR & PRACTICE ---
 with tab3:
-    # FIXED LINE: Only one variable to store the selection
-    mode = st.radio("Choose Mode:", ["Calculator with Steps", "Real-Life Problem Generator"], horizontal=True)
+    mode = st.radio("Choose Mode:", ["Calculator & 3D Visualizer", "Real-Life Problem Generator"], horizontal=True)
+    x_sym, y_sym = sp.symbols('x y')
 
-    x, y = sp.symbols('x y')
-
-    if mode == "Calculator with Steps":
-        st.header("Step-by-Step Calculator")
-        user_input = st.text_input("Enter function $f(x, y)$:", value="x**2 * y + 3*y**4")
+    if mode == "Calculator & 3D Visualizer":
+        st.header("Step-by-Step Calculator & Visualizer")
+        user_input = st.text_input("Enter function $f(x, y)$:", value="x**2 - y**2")
         
         try:
-            f = sp.sympify(user_input)
-            df_dx = sp.diff(f, x)
-            df_dy = sp.diff(f, y)
+            f_expr = sp.sympify(user_input)
+            df_dx = sp.diff(f_expr, x_sym)
+            df_dy = sp.diff(f_expr, y_sym)
 
-            st.write("### Solution Results")
+            # --- STEP BY STEP SECTION ---
+            st.subheader("🔍 Worked Problem Example")
+            col_calc1, col_calc2 = st.columns(2)
+            with col_calc1:
+                st.success(f"**Partial w.r.t x (∂f/∂x)**")
+                st.latex(sp.latex(df_dx))
+                with st.expander("Show Steps"):
+                    st.write("1. Treat $y$ as a constant.")
+                    st.write(f"2. Apply differentiation to: ${sp.latex(f_expr)}$")
+                    st.write(f"3. Result: ${sp.latex(df_dx)}$")
+            with col_calc2:
+                st.success(f"**Partial w.r.t y (∂f/∂y)**")
+                st.latex(sp.latex(df_dy))
+                with st.expander("Show Steps"):
+                    st.write("1. Treat $x$ as a constant.")
+                    st.write(f"2. Apply differentiation to: ${sp.latex(f_expr)}$")
+                    st.write(f"3. Result: ${sp.latex(df_dy)}$")
+
+            # --- VISUALIZATION SECTION ---
+            st.divider()
+            st.subheader("📊 3D Meaningful Visualization")
             
-            col1, col2 = st.columns(2)
-            with col1:
-                st.latex(r"\frac{\partial f}{\partial x} = " + sp.latex(df_dx))
-                with st.expander("Show Steps for x"):
-                    st.write("**Process:**")
-                    st.write("1. Look at $f(x, y) = ", f, "$")
-                    st.write("2. Treat $y$ as a constant value.")
-                    st.write("3. Apply the power/chain rules to $x$.")
-                    st.success(f"Result: {df_dx}")
-                    
-            with col2:
-                st.latex(r"\frac{\partial f}{\partial y} = " + sp.latex(df_dy))
-                with st.expander("Show Steps for y"):
-                    st.write("**Process:**")
-                    st.write("1. Look at $f(x, y) = ", f, "$")
-                    st.write("2. Treat $x$ as a constant value.")
-                    st.write("3. Apply the power/chain rules to $y$.")
-                    st.success(f"Result: {df_dy}")
-        except:
-            st.error("Invalid math syntax. Use * for multiply and ** for power.")
+            # Create data for plot
+            f_func = sp.lambdify((x_sym, y_sym), f_expr, "numpy")
+            x_vals = np.linspace(-5, 5, 50)
+            y_vals = np.linspace(-5, 5, 50)
+            X, Y = np.meshgrid(x_vals, y_vals)
+            try:
+                Z = f_func(X, Y)
+                if isinstance(Z, (int, float)): # Handle constant functions
+                    Z = np.full(X.shape, Z)
+
+                fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale='Viridis')])
+                fig.update_layout(title='Surface Plot of f(x, y)', autosize=False,
+                                  width=700, height=700,
+                                  margin=dict(l=65, r=50, b=65, t=90))
+                st.plotly_chart(fig)
+                
+                # Aspect Explanations
+                st.markdown("""
+                **3 Key Aspects of this Visualization:**
+                1. **Surface Geometry:** The 3D shape represents all possible outputs of $f(x,y)$.
+                2. **$f_x$ (x-slope):** If you move along the X-axis (left-right), the steepness of the surface is $\\frac{\\partial f}{\\partial x}$.
+                3. **$f_y$ (y-slope):** If you move along the Y-axis (forward-back), the steepness is $\\frac{\\partial f}{\\partial y}$.
+                """)
+            except:
+                st.warning("Visualization not available for this complex function.")
+
+        except Exception as e:
+            st.error(f"Syntax Error: {e}")
 
     else:
         st.header("Real-Life Scenario Generator")
@@ -124,6 +152,7 @@ with tab3:
 # --- SIDEBAR HELP ---
 st.sidebar.header("Math Syntax Guide")
 st.sidebar.code("x^2   -> x**2\n3xy   -> 3*x*y\nsin x -> sin(x)\ne^x   -> exp(x)")
+
 
 
 
